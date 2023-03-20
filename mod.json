@@ -1,0 +1,25 @@
+{
+	"Name": "Friendly Fire",
+	"Description": "Hurt your teammates",
+	"Version": "1.0.0",
+	"LoadPriority": 2,
+    "Scripts": [
+        {
+            "Path": "riff_friendlyfire.gnut",
+            "RunOn": "( SERVER || CLIENT ) && MP",
+			"ClientCallback": {
+				"Before": "Riff_FriendlyFire_Init"
+			},
+			"ServerCallback": {
+				"Before": "Riff_FriendlyFire_Init"
+			}
+		},
+		{
+			"Path": "_friendly_execution.gnut",
+            "RunOn": "SERVER && MP",
+			"ServerCallback": {
+				"Before": "Friendly_Execution_Init"
+			}
+		}
+    ]
+}
