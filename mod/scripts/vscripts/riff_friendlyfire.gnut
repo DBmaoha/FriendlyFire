@@ -3,5 +3,8 @@ global function Riff_FriendlyFire_Init
 void function Riff_FriendlyFire_Init()
 {
     AddPrivateMatchModeSettingEnum( "#FRIENDLY_FIRE", "friendly_fire", [ "Disabled", "Enabled" ], "0" )
+    // reverse the rodeo behavior: remove friendly titan's battery and apply them to enemy titans
     AddPrivateMatchModeSettingEnum( "#FRIENDLY_FIRE", "reversed_rodeo", [ "Disabled", "Enabled" ], "0" )
+    // monarch always heal target if they have energy transfer
+    AddPrivateMatchModeSettingEnum( "#FRIENDLY_FIRE", "monarch_force_heal", [ "Disabled", "Enabled" ], "0" )
 }
