@@ -77,12 +77,21 @@ void function StunLaser_DamagedTarget( entity target, var damageInfo )
 		return
 	}
 
+	entity weapon // can't use DamageInfo_GetWeapon( damageInfo ) since it can't handle radius damage caused by energy field!
+	foreach ( entity offhand in attacker.GetOffhandWeapons() )
+	{
+		if ( offhand.GetWeaponClassName() == "mp_titanweapon_stun_laser" ) // this is hardcoded!!!
+		{
+			weapon = offhand
+			break
+		}
+	}
+	if ( !IsValid( weapon ) )
+		return
+	
 	// friendly fire support
 	bool friendlyFireOn = GetCurrentPlaylistVarInt( "friendly_fire", 0 ) != 0
 	bool forceHeal = GetCurrentPlaylistVarInt( "monarch_force_heal", 0 ) != 0
-	entity weapon = DamageInfo_GetWeapon( damageInfo )
-	if ( !IsValid( weapon ) )
-		return
 	bool hasEnergyTransfer = weapon.HasMod( "energy_transfer" ) || weapon.HasMod( "energy_field_energy_transfer" )
 
 	if ( ( attacker.GetTeam() == target.GetTeam() || ( friendlyFireOn && forceHeal ) ) && hasEnergyTransfer )
