@@ -290,7 +290,8 @@ bool function CodeCallback_IsValidMeleeExecutionTarget( entity attacker, entity 
 			return false
 	}
 
-	if ( attacker.GetTeam() == target.GetTeam() )
+	bool friendlyFireOn = GetCurrentPlaylistVarInt( "friendly_fire", 0 ) != 0
+	if ( attacker.GetTeam() == target.GetTeam() && !friendlyFireOn )
 		return false
 
 #if SERVER

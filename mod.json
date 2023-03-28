@@ -13,13 +13,6 @@
 			"ServerCallback": {
 				"Before": "Riff_FriendlyFire_Init"
 			}
-		},
-		{
-			"Path": "_friendly_execution.gnut",
-            "RunOn": "SERVER && MP",
-			"ServerCallback": {
-				"Before": "Friendly_Execution_Init"
-			}
 		}
     ]
 }
