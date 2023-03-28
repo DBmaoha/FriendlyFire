@@ -80,12 +80,12 @@ void function StunLaser_DamagedTarget( entity target, var damageInfo )
 	// friendly fire support
 	bool friendlyFireOn = GetCurrentPlaylistVarInt( "friendly_fire", 0 ) != 0
 	bool forceHeal = GetCurrentPlaylistVarInt( "monarch_force_heal", 0 ) != 0
-	entity weapon = attacker.GetOffhandWeapon( OFFHAND_LEFT )
+	entity weapon = DamageInfo_GetWeapon( damageInfo )
 	if ( !IsValid( weapon ) )
 		return
 	bool hasEnergyTransfer = weapon.HasMod( "energy_transfer" ) || weapon.HasMod( "energy_field_energy_transfer" )
 
-	if ( ( attacker.GetTeam() == target.GetTeam() || ( friendlyFireOn && forceHeal ) ) && hasEnergyTransfer ) // heal enemy and stun friendly if friendlyFire on
+	if ( ( attacker.GetTeam() == target.GetTeam() || ( friendlyFireOn && forceHeal ) ) && hasEnergyTransfer )
 	{
 		DamageInfo_SetDamage( damageInfo, 0 )
 		entity attackerSoul = attacker.GetTitanSoul()

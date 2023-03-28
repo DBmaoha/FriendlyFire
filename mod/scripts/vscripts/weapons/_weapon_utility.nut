@@ -3023,11 +3023,20 @@ void function VanguardEnergySiphon_DamagedPlayerOrNPC( entity ent, var damageInf
 	entity attacker = DamageInfo_GetAttacker( damageInfo )
 
 	bool friendlyFireOn = GetCurrentPlaylistVarInt( "friendly_fire", 0 ) != 0
-	if( !IsValid( attacker ) )  // we added friendly fire, do a new check now!
-		return
-	if( attacker.GetTeam() == ent.GetTeam() && !friendlyFireOn )
+	bool forceHeal = GetCurrentPlaylistVarInt( "monarch_force_heal", 0 ) != 0
+	if( !IsValid( attacker ) )
 		return
 
+	// force heal check
+	bool hasEnergyTransfer = false
+	entity weapon = DamageInfo_GetWeapon( damageInfo )
+	if ( IsValid( weapon ) )
+		hasEnergyTransfer = weapon.HasMod( "energy_transfer" ) || weapon.HasMod( "energy_field_energy_transfer" )
+
+	// we added friendly fire, do a new check now!
+	if ( ( attacker.GetTeam() == ent.GetTeam() || ( friendlyFireOn && forceHeal ) ) && hasEnergyTransfer )
+		return	
+	
 	Elecriticy_DamagedPlayerOrNPC( ent, damageInfo, FX_VANGUARD_ENERGY_BODY_HUMAN, FX_VANGUARD_ENERGY_BODY_TITAN, LASER_STUN_SEVERITY_SLOWTURN, LASER_STUN_SEVERITY_SLOWMOVE )
 }
 

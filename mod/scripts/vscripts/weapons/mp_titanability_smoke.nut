@@ -139,41 +139,38 @@ void function ElectricSmoke_DamagedTarget( entity target, var damageInfo )
 	if ( !IsValid( weapon ) )
 		return
 
+	bool hasHealSmoke = weapon.HasMod( "fd_vanguard_utility_1" ) || weapon.HasMod( "fd_vanguard_utility_2" )
 	// friendly fire support
 	bool friendlyFireOn = GetCurrentPlaylistVarInt( "friendly_fire", 0 ) != 0
 	bool forceHeal = GetCurrentPlaylistVarInt( "monarch_force_heal", 0 ) != 0
 	if ( attacker.GetTeam() == target.GetTeam() || ( friendlyFireOn && forceHeal ) || attacker == target )
 	{
-		if ( ( attacker == target && weapon.HasMod( "fd_vanguard_utility_1" ) ) || weapon.HasMod( "fd_vanguard_utility_2" ) )
+		// healing condition
+		entity soul = target.GetTitanSoul()
+		if ( IsValid( soul ) && hasHealSmoke )
 		{
-			entity soul = target.GetTitanSoul()
-			if ( IsValid( soul ) )
-			{
-				int shieldRestoreAmount = 35
-				int actualShieldRestoreAmount = minint( soul.GetShieldHealthMax()-soul.GetShieldHealth(), shieldRestoreAmount )
-				soul.SetShieldHealth( min( soul.GetShieldHealth() + shieldRestoreAmount, soul.GetShieldHealthMax() ) )
-
-				if ( file.smokeHealCallback != null && actualShieldRestoreAmount > 0 )
-					file.smokeHealCallback( attacker, target, actualShieldRestoreAmount )
-
-				//float shieldHealthFrac = GetShieldHealthFrac( target )
-				//if ( shieldHealthFrac < 1.0 )
-				//{
-				//	int shieldbodyFX = GetParticleSystemIndex( SHIELD_BODY_FX )
-				//	int attachID
-				//	if ( target.IsTitan() )
-				//		attachID = target.LookupAttachment( "exp_torso_main" )
-				//	else
-				//		attachID = target.LookupAttachment( "ref" )
-				//
-				//	entity shieldFXEnt = StartParticleEffectOnEntity_ReturnEntity( target, shieldbodyFX, FX_PATTACH_POINT_FOLLOW, attachID )
-				//	EffectSetControlPointVector( shieldFXEnt, 1, < 115, 247, 255 > )
-				//}
-			}
-		}
-
-		if ( ( attacker.GetTeam() == target.GetTeam() && !friendlyFireOn ) || forceHeal )
 			DamageInfo_SetDamage( damageInfo, 0 )
+			int shieldRestoreAmount = 35
+			int actualShieldRestoreAmount = minint( soul.GetShieldHealthMax()-soul.GetShieldHealth(), shieldRestoreAmount )
+			soul.SetShieldHealth( min( soul.GetShieldHealth() + shieldRestoreAmount, soul.GetShieldHealthMax() ) )
+
+			if ( file.smokeHealCallback != null && actualShieldRestoreAmount > 0 )
+				file.smokeHealCallback( attacker, target, actualShieldRestoreAmount )
+
+			//float shieldHealthFrac = GetShieldHealthFrac( target )
+			//if ( shieldHealthFrac < 1.0 )
+			//{
+			//	int shieldbodyFX = GetParticleSystemIndex( SHIELD_BODY_FX )
+			//	int attachID
+			//	if ( target.IsTitan() )
+			//		attachID = target.LookupAttachment( "exp_torso_main" )
+			//	else
+			//		attachID = target.LookupAttachment( "ref" )
+			//
+			//	entity shieldFXEnt = StartParticleEffectOnEntity_ReturnEntity( target, shieldbodyFX, FX_PATTACH_POINT_FOLLOW, attachID )
+			//	EffectSetControlPointVector( shieldFXEnt, 1, < 115, 247, 255 > )
+			//}
+		}
 		return
 	}
 }
