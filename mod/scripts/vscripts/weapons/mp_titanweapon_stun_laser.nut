@@ -93,11 +93,13 @@ void function StunLaser_DamagedTarget( entity target, var damageInfo )
 	bool friendlyFireOn = GetCurrentPlaylistVarInt( "friendly_fire", 0 ) != 0
 	bool forceHeal = GetCurrentPlaylistVarInt( "monarch_force_heal", 0 ) != 0
 	bool hasEnergyTransfer = weapon.HasMod( "energy_transfer" ) || weapon.HasMod( "energy_field_energy_transfer" )
-
-	if ( ( attacker.GetTeam() == target.GetTeam() || ( friendlyFireOn && forceHeal ) ) && hasEnergyTransfer )
+	bool sameTeam = attacker.GetTeam() == target.GetTeam()
+	// friendly condition
+	if ( ( sameTeam || ( friendlyFireOn && forceHeal ) ) && hasEnergyTransfer )
 	{
 		DamageInfo_SetDamage( damageInfo, 0 )
 		entity attackerSoul = attacker.GetTitanSoul()
+		// healing!
 		if ( target.IsTitan() && IsValid( attackerSoul ) )
 		{
 			entity soul = target.GetTitanSoul()
@@ -136,8 +138,15 @@ void function StunLaser_DamagedTarget( entity target, var damageInfo )
 			}
 		}
 	}
-	else if ( target.IsNPC() || target.IsPlayer() )
+	// non energy transfer condition
+	else if ( target.IsNPC() || target.IsPlayer() ) 
 	{
+		if ( sameTeam && !friendlyFireOn ) // normal ff: don't deal damage and don't regen shields
+		{
+			DamageInfo_SetDamage( damageInfo, 0 )
+			return
+		}
+		
 		int shieldRestoreAmount = target.GetArmorType() == ARMOR_TYPE_HEAVY ? 750 : 250
 		entity soul = attacker.GetTitanSoul()
 		if ( IsValid( soul ) )
