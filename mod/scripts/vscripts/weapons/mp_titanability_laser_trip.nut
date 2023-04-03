@@ -417,11 +417,11 @@ void function LaserPylonSetThink( entity pylon1, entity pylon2, int ownerTeam )
 	vector laserOOBMaxs = < pylonDist * 0.5, 8.0, 8.0 >
 
 	// friendly fire support
-	bool friendlyFireOn = GetCurrentPlaylistVarInt( "friendly_fire", 0 ) != 0
+	bool searchForFriendly = GetCurrentPlaylistVarInt( "friendly_fire", 0 ) != 0 && GetCurrentPlaylistVarInt( "tripwire_search_friendly", 0 ) != 0
 	while ( true )
 	{
 		array<entity> enemies 
-		if ( friendlyFireOn ) // friendlyfire condition
+		if ( searchForFriendly ) // friendlyfire condition
 		{
 			// attack all players and npcs
 			enemies.extend( GetPlayerArray() )

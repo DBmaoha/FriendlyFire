@@ -7,4 +7,6 @@ void function Riff_FriendlyFire_Init()
     AddPrivateMatchModeSettingEnum( "#FRIENDLY_FIRE", "reversed_rodeo", [ "Disabled", "Enabled" ], "0" )
     // monarch always heal target if they have energy transfer
     AddPrivateMatchModeSettingEnum( "#FRIENDLY_FIRE", "monarch_force_heal", [ "Disabled", "Enabled" ], "0" )
+    // tripwire and tethers will search for friendly players if this turns on
+    AddPrivateMatchModeSettingEnum( "#FRIENDLY_FIRE", "tripwire_search_friendly", [ "Disabled", "Enabled" ], "0" )
 }
