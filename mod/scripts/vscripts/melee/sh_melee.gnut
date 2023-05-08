@@ -325,8 +325,8 @@ bool function CodeCallback_IsValidMeleeAttackTarget( entity attacker, entity tar
 	if ( !CanBeMeleed( target ) )
 		return false
 
-	bool friendlyFireOn = GetCurrentPlaylistVarInt( "friendly_fire", 0 ) != 0
-	if ( attacker.GetTeam() == target.GetTeam() && !friendlyFireOn )
+	bool canMeleeFriendly = GetCurrentPlaylistVarInt( "friendly_fire", 0 ) != 0 || GetCurrentPlaylistVarInt( "friendly_melee", 0 ) != 0
+	if ( attacker.GetTeam() == target.GetTeam() && !canMeleeFriendly )
 		return false
 
 #if SERVER
